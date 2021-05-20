@@ -16,7 +16,7 @@ data "aws_ssm_parameter" "linux_ami" {
 resource "aws_security_group" "web_server_sg" {
   name        = join("_", ["web_server", "module.vpc.vpc_id", "sg"])
   description = "Allow web server  inbound traffic"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = module.vpc.example_vpc.id
 
   dynamic "ingress" {
     for_each = var.rules
@@ -36,16 +36,16 @@ resource "aws_security_group" "web_server_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
-    Name = join("_", ["web_server", "module.vpc.vpc_id", "sg"])
+    Name = join("_", ["web_server", "module.vpc.example_vpc.id", "sg"])
   }
-  depends_on = [module.vpc.vpc_id]
+  depends_on = [module.vpc.example_vpc]
 }
 
 
 resource "aws_instance" "web_server" {
   ami             = data.aws_ssm_parameter.linux_ami.value
   instance_type   = "t2.micro"
-  subnet_id       = module.vpc.subnet_id
+  subnet_id       = module.vpc.example_subnet.id
   security_groups = [aws_security_group.web_server_sg.id]
   tags = {
     Name = "${terraform.workspace}-example-web-server"
@@ -56,7 +56,7 @@ resource "aws_instance" "web_server" {
 resource "aws_instance" "remote-server" {
   ami             = "ami-2757f631"
   instance_type   = "t2.micro"
-  subnet_id       = module.vpc.subnet_id
+  subnet_id       = module.vpc.example_subnet.id
   security_groups = [aws_security_group.web_server_sg.id]
   key_name        = "student"
   provisioner "remote-exec" {

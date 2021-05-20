@@ -1,7 +1,7 @@
-output "vpc_id" {
-  value = aws_vpc.example_vpc.id
+output "example_vpc" {
+  value = aws_vpc.example_vpc
 }
 
-output "subnet_id" {
-  value = aws_subnet.example_subnet_1.id
+output "example_subnet" {
+  value = aws_subnet.example_subnet_1
 }
