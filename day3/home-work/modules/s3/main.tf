@@ -2,7 +2,7 @@ provider "aws" {
   region = var.region
 }
 
-// use random_id because the bucket name must be a only vaule in this world.
+// use random_id because the bucket name must be an only vaule in this world.
 resource "random_id" "bucket_name_suffix" {
   byte_length = 4
 }
