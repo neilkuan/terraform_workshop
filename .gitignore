@@ -1,6 +1,7 @@
 .terraform
 terraform.tfstate
-terraform.tfstate.backup
+terraform.tfstate*
+.terraform.lock*
 # Folder view configuration files
 .DS_Store
 Desktop.ini
