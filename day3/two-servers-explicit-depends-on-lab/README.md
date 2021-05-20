@@ -7,7 +7,7 @@ $ git clone https://github.com/neilkuan/terraform_workshop.git
 
 ## install provider.
 ```bash
-$ cd day3/two-servers-counter-explicit-depend-on
+$ cd day3/two-servers-counter-explicit-depend-on-lab
 
 $ terraform init
 --- example output ---
