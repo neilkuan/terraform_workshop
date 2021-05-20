@@ -1,4 +1,4 @@
-# terraform_workshop day3 lab (Implicit depend on)
+# terraform_workshop day3 lab (home work)
 
 ## Clone project 
 ```bash
@@ -7,7 +7,7 @@ $ git clone https://github.com/neilkuan/terraform_workshop.git
 
 ## install provider.
 ```bash
-$ cd day3/two-servers-counter-implicit-depend-on-lab
+$ cd day3/home-work
 
 $ terraform init
 --- example output ---
