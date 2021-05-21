@@ -41,6 +41,10 @@ resource "aws_security_group" "web_server_sg" {
   depends_on = [module.vpc.example_vpc]
 }
 
+resource "aws_key_pair" "remote_server_key" {
+  key_name   = "remote_server"
+  public_key = file("~/.ssh/example.pub")
+}
 
 resource "aws_instance" "web_server" {
   ami             = data.aws_ssm_parameter.linux_ami.value
@@ -58,7 +62,7 @@ resource "aws_instance" "remote-server" {
   instance_type   = "t2.micro"
   subnet_id       = module.vpc.example_subnet.id
   security_groups = [aws_security_group.web_server_sg.id]
-  key_name        = "student"
+  key_name        = aws_key_pair.remote_server_key.key_name
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get update -y && sudo apt-get install -y apache2 && sudo systemctl start apache2",
@@ -68,7 +72,7 @@ resource "aws_instance" "remote-server" {
     connection {
       type        = "ssh"
       user        = "ubuntu"
-      private_key = file("~/.ssh/student.pem")
+      private_key = file("~/.ssh/example")
       host        = self.public_ip
     }
   }

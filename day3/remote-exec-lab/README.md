@@ -44,8 +44,34 @@ rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 ```
 
-## *Create key pair in region you want to apply.*
-
+## *Create Gen your ssh key in your $HOME/.ssh*
+> see `key_pair` docs: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html
+> see the note about ssh-keygen: https://gist.github.com/neilkuan/ede7d996b8949f0e555c195c7e863069
+```bash
+$ ssh-keygen -t rsa -b 4096 -f $HOME/.ssh/example -P "" -C exampleuser@example.com
+--- example output ---
+Generating public/private rsa key pair.
+Your identification has been saved in $HOME/.ssh/example.
+Your public key has been saved in $HOME/.ssh/example.pub.
+The key fingerprint is:
+SHA256:xxxxxxxxx/xxxxxxxxxx/xxxxxxxxxxxxx exampleuser@example.com
+The the randomart image of key is:
++---[RSA 4096]----+
+|                 |
+|                 |
+.                 . 
+.                 .
+.                 .
+|                 |
+|                 |
++----[SHA256]-----+
+-----------------------
+```
+```bash
+$ ls $HOME/.ssh/example*
+--- example output ---
+$HOME/.ssh/example  $HOME/.ssh/example.pub
+```
 ## To plan
 ```bash
 $ terraform plan
@@ -90,7 +116,7 @@ Terraform will perform the following actions:
         }
     }
 
-Plan: 8 to add, 0 to change, 0 to destroy.
+Plan: 9 to add, 0 to change, 0 to destroy.
 
 Changes to Outputs:
   + private_ip                  = (known after apply)
@@ -164,7 +190,7 @@ aws_instance.remote-server (remote-exec): Processing triggers for ureadahead (0.
 aws_instance.remote-server (remote-exec): Processing triggers for ufw (0.35-0ubuntu2) ...
 aws_instance.remote-server: Creation complete after 1m56s [id=i-0c67769589017f6c9]
 
-Apply complete! Resources: 8 added, 0 changed, 0 destroyed.
+Apply complete! Resources: 9 added, 0 changed, 0 destroyed.
 
 Outputs:
 
@@ -177,39 +203,59 @@ public_ip_web_server_remote = "http://18.204.231.77"
 ```bash
 $ terraform destroy
 --- example output ---
-module.vpc.aws_vpc.example_vpc: Refreshing state... [id=vpc-02cf406707f4f8acd]
-module.vpc.aws_internet_gateway.example_igw: Refreshing state... [id=igw-0fdb74f4a425e4353]
-module.vpc.aws_subnet.example_subnet_1: Refreshing state... [id=subnet-03d206ed7ceff89aa]
-aws_security_group.web_server_sg: Refreshing state... [id=sg-05ddd6926b2e1b23d]
-module.vpc.aws_route_table_association.example_a_igw: Refreshing state... [id=rtbassoc-070ca87a00deb88e0]
-aws_instance.remote-server: Refreshing state... [id=i-0c67769589017f6c9]
-aws_instance.web_server: Refreshing state... [id=i-08fd56f886984ec69]
-module.vpc.aws_route.r_igw: Refreshing state... [id=r-rtb-065fd32576b86b77b1080289494]
-aws_instance.remote-server: Destroying... [id=i-0c67769589017f6c9]
-aws_instance.web_server: Destroying... [id=i-08fd56f886984ec69]
-module.vpc.aws_route.r_igw: Destroying... [id=r-rtb-065fd32576b86b77b1080289494]
-module.vpc.aws_route.r_igw: Destruction complete after 2s
-module.vpc.aws_route_table_association.example_a_igw: Destroying... [id=rtbassoc-070ca87a00deb88e0]
-module.vpc.aws_internet_gateway.example_igw: Destroying... [id=igw-0fdb74f4a425e4353]
-module.vpc.aws_route_table_association.example_a_igw: Destruction complete after 1s
-aws_instance.remote-server: Still destroying... [id=i-0c67769589017f6c9, 10s elapsed]
-aws_instance.web_server: Still destroying... [id=i-08fd56f886984ec69, 10s elapsed]
-module.vpc.aws_internet_gateway.example_igw: Still destroying... [id=igw-0fdb74f4a425e4353, 10s elapsed]
-aws_instance.remote-server: Still destroying... [id=i-0c67769589017f6c9, 20s elapsed]
-aws_instance.web_server: Still destroying... [id=i-08fd56f886984ec69, 20s elapsed]
-module.vpc.aws_internet_gateway.example_igw: Still destroying... [id=igw-0fdb74f4a425e4353, 20s elapsed]
-aws_instance.web_server: Still destroying... [id=i-08fd56f886984ec69, 30s elapsed]
-aws_instance.remote-server: Still destroying... [id=i-0c67769589017f6c9, 30s elapsed]
-module.vpc.aws_internet_gateway.example_igw: Still destroying... [id=igw-0fdb74f4a425e4353, 30s elapsed]
-module.vpc.aws_internet_gateway.example_igw: Destruction complete after 32s
-aws_instance.web_server: Destruction complete after 37s
-aws_instance.remote-server: Destruction complete after 37s
-module.vpc.aws_subnet.example_subnet_1: Destroying... [id=subnet-03d206ed7ceff89aa]
-aws_security_group.web_server_sg: Destroying... [id=sg-05ddd6926b2e1b23d]
+aws_key_pair.remote_server_key: Refreshing state... [id=remote_server]
+module.vpc.aws_vpc.example_vpc: Refreshing state... [id=vpc-08d0352f0c1102abe]
+module.vpc.aws_internet_gateway.example_igw: Refreshing state... [id=igw-0464f8973556202e7]
+module.vpc.aws_subnet.example_subnet_1: Refreshing state... [id=subnet-06ebfc5c12f1864cd]
+aws_security_group.web_server_sg: Refreshing state... [id=sg-0f863a7f74e2a5160]
+module.vpc.aws_route_table_association.example_a_igw: Refreshing state... [id=rtbassoc-09ceca6b9f8f26886]
+aws_instance.remote-server: Refreshing state... [id=i-05316cd53d7a6c0e0]
+aws_instance.web_server: Refreshing state... [id=i-055e4cf9d49b4e345]
+module.vpc.aws_route.r_igw: Refreshing state... [id=r-rtb-09f11db3c352299ea1080289494]
+aws_instance.web_server: Destroying... [id=i-055e4cf9d49b4e345]
+aws_instance.remote-server: Destroying... [id=i-05316cd53d7a6c0e0]
+module.vpc.aws_route.r_igw: Destroying... [id=r-rtb-09f11db3c352299ea1080289494]
+module.vpc.aws_route.r_igw: Destruction complete after 1s
+module.vpc.aws_route_table_association.example_a_igw: Destroying... [id=rtbassoc-09ceca6b9f8f26886]
+module.vpc.aws_internet_gateway.example_igw: Destroying... [id=igw-0464f8973556202e7]
+module.vpc.aws_route_table_association.example_a_igw: Destruction complete after 2s
+aws_instance.web_server: Still destroying... [id=i-055e4cf9d49b4e345, 10s elapsed]
+aws_instance.remote-server: Still destroying... [id=i-05316cd53d7a6c0e0, 10s elapsed]
+module.vpc.aws_internet_gateway.example_igw: Still destroying... [id=igw-0464f8973556202e7, 10s elapsed]
+aws_instance.web_server: Still destroying... [id=i-055e4cf9d49b4e345, 20s elapsed]
+aws_instance.remote-server: Still destroying... [id=i-05316cd53d7a6c0e0, 20s elapsed]
+module.vpc.aws_internet_gateway.example_igw: Still destroying... [id=igw-0464f8973556202e7, 20s elapsed]
+aws_instance.web_server: Still destroying... [id=i-055e4cf9d49b4e345, 30s elapsed]
+aws_instance.remote-server: Still destroying... [id=i-05316cd53d7a6c0e0, 30s elapsed]
+module.vpc.aws_internet_gateway.example_igw: Still destroying... [id=igw-0464f8973556202e7, 30s elapsed]
+aws_instance.web_server: Still destroying... [id=i-055e4cf9d49b4e345, 40s elapsed]
+aws_instance.remote-server: Still destroying... [id=i-05316cd53d7a6c0e0, 40s elapsed]
+module.vpc.aws_internet_gateway.example_igw: Still destroying... [id=igw-0464f8973556202e7, 40s elapsed]
+aws_instance.remote-server: Destruction complete after 49s
+aws_key_pair.remote_server_key: Destroying... [id=remote_server]
+aws_instance.web_server: Still destroying... [id=i-055e4cf9d49b4e345, 50s elapsed]
+aws_key_pair.remote_server_key: Destruction complete after 2s
+module.vpc.aws_internet_gateway.example_igw: Still destroying... [id=igw-0464f8973556202e7, 50s elapsed]
+aws_instance.web_server: Still destroying... [id=i-055e4cf9d49b4e345, 1m0s elapsed]
+module.vpc.aws_internet_gateway.example_igw: Still destroying... [id=igw-0464f8973556202e7, 1m0s elapsed]
+aws_instance.web_server: Still destroying... [id=i-055e4cf9d49b4e345, 1m10s elapsed]
+module.vpc.aws_internet_gateway.example_igw: Still destroying... [id=igw-0464f8973556202e7, 1m10s elapsed]
+aws_instance.web_server: Still destroying... [id=i-055e4cf9d49b4e345, 1m20s elapsed]
+module.vpc.aws_internet_gateway.example_igw: Still destroying... [id=igw-0464f8973556202e7, 1m20s elapsed]
+aws_instance.web_server: Still destroying... [id=i-055e4cf9d49b4e345, 1m30s elapsed]
+module.vpc.aws_internet_gateway.example_igw: Still destroying... [id=igw-0464f8973556202e7, 1m30s elapsed]
+aws_instance.web_server: Still destroying... [id=i-055e4cf9d49b4e345, 1m40s elapsed]
+module.vpc.aws_internet_gateway.example_igw: Still destroying... [id=igw-0464f8973556202e7, 1m40s elapsed]
+aws_instance.web_server: Still destroying... [id=i-055e4cf9d49b4e345, 1m50s elapsed]
+module.vpc.aws_internet_gateway.example_igw: Still destroying... [id=igw-0464f8973556202e7, 1m50s elapsed]
+module.vpc.aws_internet_gateway.example_igw: Destruction complete after 1m52s
+aws_instance.web_server: Destruction complete after 1m57s
+module.vpc.aws_subnet.example_subnet_1: Destroying... [id=subnet-06ebfc5c12f1864cd]
+aws_security_group.web_server_sg: Destroying... [id=sg-0f863a7f74e2a5160]
 module.vpc.aws_subnet.example_subnet_1: Destruction complete after 3s
 aws_security_group.web_server_sg: Destruction complete after 3s
-module.vpc.aws_vpc.example_vpc: Destroying... [id=vpc-02cf406707f4f8acd]
+module.vpc.aws_vpc.example_vpc: Destroying... [id=vpc-08d0352f0c1102abe]
 module.vpc.aws_vpc.example_vpc: Destruction complete after 2s
 
-Destroy complete! Resources: 8 destroyed.
+Destroy complete! Resources: 9 destroyed.
 ```
