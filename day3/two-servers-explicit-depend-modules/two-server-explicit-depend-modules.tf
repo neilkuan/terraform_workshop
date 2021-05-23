@@ -27,5 +27,5 @@ resource "aws_instance" "server3" {
     Name = "server3"
   }
   // Explicitly create a dependency. server2 module.server1 and must exist before server3 can be created
-  depends_on    = [aws_instance.server2, module.server.server_id]
+  depends_on    = [aws_instance.server2, module.server]
 }

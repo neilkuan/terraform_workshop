@@ -1,3 +1,3 @@
-output "server_id" {
-  value = aws_instance.server1.id
+output "server" {
+  value = aws_instance.server1
 }
